@@ -4,7 +4,7 @@ _Redux with vanilla JS and React_
 
 ## 1. Why Redux❔
 
-- `Redux`는 `자바스크립트`를 위한 상태 관리 프레임워크
+- `Redux`는 `JavaScript`를 위한 상태 관리 프레임워크
 - **리덕스 사용 이유**
   - 컴포넌트 코드로부터 상태 관리 코드를 분리할 수 있다
   - 서버 렌더링 시 데이터 전달이 간편하다
@@ -32,14 +32,20 @@ _Redux with vanilla JS and React_
 
  <img src="/img/그림01.jpg" width=700px>
 
-#### 0) createStore
+#### 0) Store
 
-- state data를 저장하는 곳
-- app 하나당 하나의 store 만 있어야 한다
+- state data를 저장하는 객체
+- 하나의 app에 하나의 store 만 있는 것이 원칙이나, 기술적으로는 다수의 store가 있어도 문제가 되지 않는다. 특별한 이유가 없다면 Store는 하나만 만드는 것이 좋다.
 
 ```javascript
 const store = createStore(reducer, [preloadedState], [middleWare]); // ⭐ reducer 인자 필수
 ```
+
+- store의 메소드
+  - `getState()`
+  - `dispatch(action)`
+  - `subscribe(listener)`
+  - `replaceReducer(nextReducer)`
 
 #### 1) Action
 
@@ -47,7 +53,6 @@ const store = createStore(reducer, [preloadedState], [middleWare]); // ⭐ reduc
 - 속성은 `type` 외에도 필요한 만큼 넣을 수 있다
 
 ```javaScript
-// EXAMPLE
 const actionObject = {
   // ⭐ type은 문자열 보다는 const 변수로 관리해주는 것이 좋다
   type : "ADD",
@@ -111,4 +116,27 @@ const printLog = (store) => (next) => (action) => {
 };
 
 const store = createStore(reducer, applyMiddleware(printLog));
+```
+
+#### 3) Reducer
+
+- 액션이 발생했을 때 새로운 상탯값을 만드는 함수
+- 순수 함수 지향
+- 상탯값을 변경하는 **유일한** 방법이어야 한다
+
+```javascript
+// 구조
+const reducer = (state, action) => nextState;
+
+// EXAMPLE
+const MyReducer = (prevState = INITIAL_STATE, { type }) => {
+  switch (type) {
+    case ADD:
+      return prevState + 1; // return 값이 다음 state가 된다
+    case MINUS:
+      return prevState - 1;
+    default:
+      return prevState;
+  }
+};
 ```
