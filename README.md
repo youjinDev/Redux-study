@@ -34,7 +34,7 @@ _Redux with vanilla JS and React_
 
  <img src="/img/그림01.jpg" width=700px>
 
-#### 0) Store
+#### 1) Store
 
 - state data를 저장하는 객체
 - 하나의 app에 하나의 store 만 있는 것이 원칙이나, 기술적으로는 다수의 store가 있어도 문제가 되지 않는다. 특별한 이유가 없다면 Store는 하나만 만드는 것이 좋다.
@@ -49,7 +49,7 @@ const store = createStore(reducer, [preloadedState], [middleWare]); // ⭐ reduc
   - `subscribe(listener)`
   - `replaceReducer(nextReducer)`
 
-#### 1) Action
+#### 2) Action
 
 - `type` 속성을 **필수로** 가진 자바스크립트 **객체**
 - 속성은 `type` 외에도 필요한 만큼 넣을 수 있다
@@ -76,18 +76,23 @@ store.dispatch(actionObject);
 const ADD = "todo/ADD";
 const REMOVE = "todo/REMOVE";
 
-function addTodo({ title, id }) {
+function addTodo(title) {
   return { type: ADD, title, id };
 }
 
-function removeTodo({ id }) {
+function removeTodo(id) {
   return { type: REMOVE, id };
 }
 
 store.dispatch(addTodo({ title: "청소하기", id: 123 }));
+
+// ...OR
+const actionCreators = { addTodo, removeTodo };
+store.dispatch(actionCreators.addTodo(title, id));
+store.dispatch(actionCreators.removeTodo(id));
 ```
 
-#### 2) Middleware
+#### 3) Middleware
 
 - 리듀서가 액션을 처리하기 전에 실행되는 **함수**
 - 디버깅 목적으로 상탯값 변경시 로그를 출력하거나, 리듀서에서 발생한 예외를 서버로 전송하는 등의 목적으로 활용
@@ -120,7 +125,7 @@ const printLog = (store) => (next) => (action) => {
 const store = createStore(reducer, applyMiddleware(printLog));
 ```
 
-#### 3) Reducer
+#### 4) Reducer
 
 - 액션이 발생했을 때 새로운 상탯값을 만드는 함수
 - 순수 함수 지향

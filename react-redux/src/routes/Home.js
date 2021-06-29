@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { actionCreator } from "../store";
+import Todo from "../Todo";
 
 function Home({ todo, addTodo }) {
   const [text, setText] = useState("");
   const onChange = (e) => setText(e.target.value);
   const onSubmit = (e) => {
     e.preventDefault();
-    setText("");
     addTodo(text);
+    setText("");
   };
 
   return (
@@ -18,14 +19,17 @@ function Home({ todo, addTodo }) {
         <input type="text" value={text} onChange={onChange} />
         <button>Add</button>
       </form>
-      <ul>{JSON.stringify(todo)}</ul>
+      <ul>
+        {todo.map((elem) => (
+          <Todo text={elem.text} key={elem.id} id={elem.id} />
+        ))}
+      </ul>
     </>
   );
 }
 
-function mapStateToProp(state, ownProps) {
-  const [todo] = state;
-  return { todo }; // should return a plain object
+function mapStateToProp(state) {
+  return { todo: state }; // should return a plain object
 }
 
 function mapDispatchToProp(dispatch) {
@@ -33,7 +37,6 @@ function mapDispatchToProp(dispatch) {
   return {
     // should return a plain object
     addTodo: (text) => dispatch(actionCreator.addTodo(text)),
-    removeTodo: (id) => dispatch(actionCreator.removeTodo(id)),
   };
 }
 
