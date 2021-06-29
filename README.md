@@ -1,5 +1,7 @@
 # 📚 Redux-study
 
+<img src="https://media.vlpt.us/images/sonofhuman20/post/7c171f4f-2b5c-45b8-928c-21ba4618c769/redux.png"/>
+
 _Redux with vanilla JS and React_
 
 ## 1. Why Redux❔
@@ -68,7 +70,7 @@ const store = createStore(reducer);
 store.dispatch(actionObject);
 ```
 
-- 단, `dispatch`를 호출할 때 직접 액션 객체를 입력하는 방식은 지양하는 편이 좋다. 꼭 써야한다면 액션 생성자 함수를 이용하여 타입을 강제하는 방법도 있다.
+- 단, `dispatch`를 호출할 때 직접 액션 객체를 입력하는 방식은 지양하는 편이 좋다. 꼭 써야한다면 `action creator`를 이용하여 타입을 강제하는 방법도 있다.
 
 ```javascript
 const ADD = "todo/ADD";
