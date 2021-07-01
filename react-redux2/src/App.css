@@ -1,0 +1,14 @@
+.App {
+  text-align: center;
+}
+
+.items {
+  border-bottom: 1px solid #333;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+
+.display {
+  border-bottom: 1px solid #333;
+  padding-bottom: 1rem;
+}
