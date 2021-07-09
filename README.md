@@ -1,4 +1,4 @@
-# 📚 Redux-study
+# 📚 Redux study
 
 <img src="https://media.vlpt.us/images/sonofhuman20/post/7c171f4f-2b5c-45b8-928c-21ba4618c769/redux.png"/>
 
@@ -30,7 +30,7 @@ _Redux with vanilla JS and React_
 
 - `reducer`는 리덕스에서 상탯값을 변경하는 함수이다. reducer는 부수 효과(side effect)를 발생시키지 않도록 순수 함수로 작성해야한다. 순수 함수이기 때문에 같은 상탯값과 액션 객체를 입력하면 항상 똑같은 다음 상탯값을 반환한다. 따라서 실행된 액션 객체를 순서대로 저장했다가 나중에 똑같은 순서대로 `dispatch` 메서드를 호출하면 replay기능을 구현할 수 있다.
 
-## 3. Redux의 상탯값 변경 과정
+## 3. Redux의 상탯값 변경 과정😎
 
  <img src="/img/그림01.jpg" width=700px>
 
@@ -147,3 +147,83 @@ const MyReducer = (prevState = INITIAL_STATE, { type }) => {
   }
 };
 ```
+
+## 4. react-redux🦆
+
+- react-redux는 redux를 react와 연동해서 사용하기 편리하도록 만든 라이브러리
+- **react-redux의 장점**
+  - store를 하위 컴포넌트에 매번 상속하지 않고도 사용할 수 있다
+  - 스토어 데이터를 사용, 변경하는 코드를 모듈화해 컴포넌트 내 중복된 코드 사용을 최소화 할 수 있다
+- react-redux도 위에서 기술한 것 처럼 redux와 동일한 과정을 거치나, `store👉component`, `component👉action` 단계에서 `connect`라는 패키지 함수가 사용된다는 차이가 있다.
+
+#### 1) react-redux의 `Provider`로 스토어 상속하기
+
+```javascript
+import { Provider } from "react-redux";
+
+/*
+Provider에 데이터를 넘겨주면
+중간 컴포넌트에서 props값을 다시 전달해줄 필요 없이
+모든 하위 컴포넌트에서 데이터를 사용할 수 있다.
+*/
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  rootElement
+);
+```
+
+#### 2) react-redux의 `connect`로 스토어 데이터 사용하기
+
+- `connect` : react-redux가 store로부터 값을 읽기 위해 제공하는 함수. 두 가지 인자를 갖는다.
+  - `mapStateToProps` : store의 상태가 변경될 때마다 호출된다. store의 전체 상태값을 받아와 컴포넌트 props에 할당한다. 반드시 객체 데이터로 리턴해야함!
+  - `mapDispatchToProps` : 이 인자는 **함수**가 될 수도 있고, **객체**가 될 수도 있다.
+    - 함수일 때 : 컴포넌트 생성시 한 번 호출됨. dipatch를 인자로 받아 컴포넌트 함수에 바인딩한다.
+    - 객체일 때 : action creator로 가득찬 객체일 경우, 각 action creator는 호출될 때 자동으로 해당 액션을 전달하는 prop 함수로 바뀜 (공식 문서에서는 객체 추천)
+
+```javascript
+const mapStateToProps = (state, ownProps) => ({
+  // ... computed data from state and optionally ownProps
+});
+
+const mapDispatchToProps = {
+  // ... normally is an object full of action creators
+};
+
+// `connect`는 새로운 함수를 리턴함
+const connectToStore = connect(mapStateToProps, mapDispatchToProps);
+
+// 그리고 그 함수는 연결된 wrapper 컴포넌트를 리턴함
+const ConnectedComponent = connectToStore(Component);
+
+// ⭐ 위 두 단계를 합쳐서 이렇게 사용
+connect(mapStateToProps, mapDispatchToProps)(Component);
+
+// 사용하지 않는 인자는 null을 넣는다
+connect(mapStateToProps, null)(Component);
+```
+
+#### 3) react-redux로 스토어 데이터 변경하기
+
+connect의 두번째 인자 `mapDispatchToProps`는 컴포넌트 함수가 실행되면 바인딩된 dipatch 함수가 실행된다.
+
+```javascript
+// 함수일 경우 인자로 dispatch와 부모 컴포넌트에서 전달한 props 변수를 받는다.
+const = mapDispatchToProps = (dispatch, props) => {
+  return {
+    // addString 함수는 props에 할당된다
+    addString: () => dispatch(add())
+  };
+}
+```
+
+---
+
+## 📖 Reference
+
+- [redux 공식 문서](https://react-redux.js.org/tutorials/connect)
+- 이재승 <실전 리액트 프로그래밍>
+- 이정열 <초보자를 위한 실전 리액트 200제>
