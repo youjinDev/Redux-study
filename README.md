@@ -179,14 +179,18 @@ ReactDOM.render(
 #### 2) react-redux의 `connect`로 스토어 데이터 사용하기
 
 - `connect` : react-redux가 store로부터 값을 읽기 위해 제공하는 함수. 두 가지 인자를 갖는다.
-  - `mapStateToProps` : store의 상태가 변경될 때마다 호출된다. store의 전체 상태값을 받아와 컴포넌트 props에 할당한다. 반드시 객체 데이터로 리턴해야함!
+  - `mapStateToProps` : store의 상태가 변경될 때마다 호출된다. store의 전체 상태값을 받아와 컴포넌트 props에 할당한다. 반드시 순수 객체 데이터로 리턴해야함!
   - `mapDispatchToProps` : 이 인자는 **함수**가 될 수도 있고, **객체**가 될 수도 있다.
     - 함수일 때 : 컴포넌트 생성시 한 번 호출됨. dipatch를 인자로 받아 컴포넌트 함수에 바인딩한다.
     - 객체일 때 : action creator로 가득찬 객체일 경우, 각 action creator는 호출될 때 자동으로 해당 액션을 전달하는 prop 함수로 바뀜 (공식 문서에서는 객체 추천)
 
 ```javascript
-const mapStateToProps = (state, ownProps) => ({
-  // ... computed data from state and optionally ownProps
+// component에서는 props.num, props.todos, props.filter 이렇게 받음!
+const mapStateToProps = (state, ownProps) => (
+  return {
+    num: 42,
+    todos: state.todos,
+    filter: state.visibilityFilter,
 });
 
 const mapDispatchToProps = {
@@ -202,28 +206,28 @@ const ConnectedComponent = connectToStore(Component);
 // ⭐ 위 두 단계를 합쳐서 이렇게 사용
 connect(mapStateToProps, mapDispatchToProps)(Component);
 
-// 사용하지 않는 인자는 null을 넣는다
+// 사용하지 않는 인자는 null이나 undefined 넣기
 connect(mapStateToProps, null)(Component);
 ```
 
 #### 3) react-redux로 스토어 데이터 변경하기
 
-connect의 두번째 인자 `mapDispatchToProps`는 컴포넌트 함수가 실행되면 바인딩된 dipatch 함수가 실행된다.
+- connect의 두번째 인자 `mapDispatchToProps`는 컴포넌트 함수가 실행되면 바인딩된 dipatch 함수가 실행된다.
 
 ```javascript
 // 함수일 경우 인자로 dispatch와 부모 컴포넌트에서 전달한 props 변수를 받는다.
-const = mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch, props) => {
   return {
     // addString 함수는 props에 할당된다
-    addString: () => dispatch(add())
+    addString: () => dispatch(add()),
   };
-}
+};
 ```
 
 ---
 
 ## 📖 Reference
 
-- [redux 공식 문서](https://react-redux.js.org/tutorials/connect)
+- [redux 공식 문서](https://react-redux.js.org/tutorials/)
 - 이재승 <실전 리액트 프로그래밍>
 - 이정열 <초보자를 위한 실전 리액트 200제>
