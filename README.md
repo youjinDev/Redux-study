@@ -228,6 +228,6 @@ const mapDispatchToProps = (dispatch, props) => {
 
 ## 📖 Reference
 
-- [redux 공식 문서](https://react-redux.js.org/tutorials/)
+- [redux 공식 문서](https://react-redux.js.org/tutorials/quick-start)
 - 이재승 <실전 리액트 프로그래밍>
 - 이정열 <초보자를 위한 실전 리액트 200제>
